@@ -1,0 +1,47 @@
+variables:
+  function_app_name: depdencygraph
+stages:
+- stage: terraform
+  jobs:
+  - job: apply
+    variables:
+    - group: depdencygraph
+    steps:
+    - task: AzureCLI@1
+      displayName: run terraform
+      inputs:
+        workingDirectory: ./terraform
+        azureSubscription: pipeline-dependecygraph
+        inlineScript: |
+          terraform init -input=false
+          terraform plan tfplan -input=false
+          terraform apply tfplan
+      env:
+        TF_VAR_CLIENT_ID: $(client-id)
+        TF_VAR_CLIENT_SECRET: $(client-secret)
+        TF_VAR_SUBSCRIPTION_ID: $(subscription-id)
+        TF_VAR_TENANT_ID: $(terant-id)
+        TF_VAR_ACCESS_KEY: $(access-key)
+        TF_VAR_function_app_name: "$(function_app_name)"
+- stage: Deploy
+  jobs:
+  - job: restore
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: restore
+        workingDirectory: ./src
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: build
+        workingDirectory: ./src
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: publish
+        publishWebProjects: true
+        zipAfterPublish: true
+    - task: AzureFunctionApp@1
+      inputs:
+        appType: functionAppLinux
+        appName: "$(function_app_name)"
+        azureSubscription: pipeline-deploy-dependecygraph
