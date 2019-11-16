@@ -14,7 +14,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           terraform init -input=false
-          terraform plan tfplan -input=false
+          terraform plan -out=tfplan -input=false
           terraform apply tfplan
         workingDirectory: 'terraform'
       env:
