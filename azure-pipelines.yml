@@ -11,7 +11,7 @@ stages:
       displayName: run terraform
       inputs:
         workingDirectory: ./terraform
-        azureSubscription: pipeline-dependecygraph
+        azureSubscription: pipeline-dependencygraph
         inlineScript: |
           terraform init -input=false
           terraform plan tfplan -input=false
@@ -44,4 +44,4 @@ stages:
       inputs:
         appType: functionAppLinux
         appName: "$(function_app_name)"
-        azureSubscription: pipeline-deploy-dependecygraph
+        azureSubscription: pipeline-deploy-dependencygraph
