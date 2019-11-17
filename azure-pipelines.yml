@@ -34,14 +34,15 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: restore
-        workingDirectory: ./src
+        workingDirectory: src
     - task: DotNetCoreCLI@2
       inputs:
         command: build
-        workingDirectory: ./src
+        workingDirectory: src
     - task: DotNetCoreCLI@2
       inputs:
         command: publish
+        workingDirectory: src
         publishWebProjects: true
         zipAfterPublish: true
     - task: AzureFunctionApp@1
