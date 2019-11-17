@@ -5,7 +5,7 @@ stages:
   jobs:
   - job: apply
     variables:
-    - group: dependencygraph
+    - group: dg-vars
     steps:
     - task: AzureCLI@1
       displayName: run terraform
