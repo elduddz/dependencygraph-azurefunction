@@ -1,5 +1,11 @@
+terraform {
+  backend "azurerm" {
+    key = "dg-azfunc-state.tfstate"
+  }
+}
+
 data "azurerm_resource_group" "rg" {
-    name = "dependencygraph-rg"
+  name = "dependencygraph-rg"
 }
 resource "azurerm_storage_account" "sa" {
   name                     = "depdencygraphsa"
