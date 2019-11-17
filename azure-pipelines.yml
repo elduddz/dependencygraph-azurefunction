@@ -65,4 +65,4 @@ stages:
               azureSubscription: 'pipeline-deploy-dg'
               appType: 'functionAppLinux'
               appName: '$(function_app_name)'
-              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              package: '**/*.zip'
