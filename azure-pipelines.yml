@@ -46,7 +46,7 @@ stages:
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: 'functionapp/'
+        rootFolderOrFile: 'src/functionapp/'
         includeRootFolder: false
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
