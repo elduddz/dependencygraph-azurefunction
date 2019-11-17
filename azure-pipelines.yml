@@ -32,12 +32,14 @@ stages:
   - job: restore
     steps:
     - task: DotNetCoreCLI@2
+      displayName: restore packages
       inputs:
         command: 'restore'
         projects: 'src/**.sln'
         feedsToUse: 'select'
         noCache: true
     - task: DotNetCoreCLI@2
+      displayName: build app
       inputs:
         command: 'build'
         projects: 'src/*.sln'
@@ -61,6 +63,7 @@ stages:
           steps:
           - checkout: none
           - task: AzureFunctionApp@1
+            displayName: deploy function app
             inputs:
               azureSubscription: 'pipeline-deploy-dg'
               appType: 'functionAppLinux'
