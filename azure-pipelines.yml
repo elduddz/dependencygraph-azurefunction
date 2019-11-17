@@ -27,7 +27,7 @@ stages:
         ARM_TENANT_ID: $(tenant-id)
         ARM_ACCESS_KEY: $(access-key)
         TF_VAR_function_app_name: "$(function_app_name)"
-- stage: Deploy
+- stage: Build
   jobs:
   - job: restore
     steps:
@@ -42,14 +42,27 @@ stages:
         command: 'build'
         projects: 'src/*.sln'
         workingDirectory: 'src'
-    - task: DotNetCoreCLI@2
+        arguments: --output functionapp
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
       inputs:
-        command: 'publish'
-        publishWebProjects: true
-        workingDirectory: 'src'
-    - task: AzureFunctionApp@1
-      inputs:
-        azureSubscription: 'pipeline-deploy-dg'
-        appType: 'functionAppLinux'
-        appName: '$(function_app_name)'
-        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        rootFolderOrFile: 'functionapp/'
+        includeRootFolder: false
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+- stage: Deploy
+  dependsOn: Build
+  jobs:
+  - deployment:
+    environment: PRD 
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: none
+          - task: AzureFunctionApp@1
+            inputs:
+              azureSubscription: 'pipeline-deploy-dg'
+              appType: 'functionAppLinux'
+              appName: '$(function_app_name)'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
