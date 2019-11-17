@@ -45,3 +45,4 @@ resource "azurerm_function_app" "fa" {
   lifecycle {
     ignore_changes = [app_settings["WEBSITE_RUN_FROM_PACKAGE"]]
   }
+}
