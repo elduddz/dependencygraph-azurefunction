@@ -5,7 +5,8 @@ stages:
   jobs:
   - job: apply
     variables:
-    - group: dg-vars
+    - group: dg-tf-vars
+    - group: dg-af-vars
     steps:
     - task: AzureCLI@1
       displayName: run terraform
@@ -18,6 +19,10 @@ stages:
           terraform apply tfplan
         workingDirectory: 'terraform'
       env:
+        connectionString: $(connectionString)
+        key: $(key)
+        databaseId: $(databaseId)
+        containerId: $(containerId)
         sa-rg: $(sa-rg)
         sa: $(sa)
         sa-container: $(sa-container)

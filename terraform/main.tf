@@ -33,4 +33,15 @@ resource "azurerm_function_app" "fa" {
   resource_group_name       = "${data.azurerm_resource_group.rg.name}"
   app_service_plan_id       = "${azurerm_app_service_plan.sp.id}"
   storage_connection_string = "${azurerm_storage_account.sa.primary_connection_string}"
-}
+  app_settings = {  
+    "connectionString"      = "${var.connectionString}"
+    "databaseId"            = "${var.databaseId}"
+    "containerId"           = "${var.containerId}"
+    "key"                   = "${var.key}"
+    "WEBSITE_ENABLE_SYNC_UPDATE_SITE" = "true"
+    "WEBSITE_RUN_FROM_PACKAGE" = "placeholder"
+  }
+
+  lifecycle {
+    ignore_changes = [app_settings["WEBSITE_RUN_FROM_PACKAGE"]]
+  }
