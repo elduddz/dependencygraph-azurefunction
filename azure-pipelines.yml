@@ -1,11 +1,11 @@
 variables:
-  function_app_name: depdencygraph
+  function_app_name: dependencygraph
 stages:
 - stage: terraform
   jobs:
   - job: apply
     variables:
-    - group: depdencygraph
+    - group: dependencygraph
     steps:
     - task: AzureCLI@1
       displayName: run terraform
