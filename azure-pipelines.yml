@@ -13,7 +13,7 @@ stages:
         azureSubscription: 'pipeline-dg'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          terraform init -input=false -backend-config="resource_group_name=$(sa-rg)" -backend-config="storage_account_name=$(sa)" -backend-config="container_name="$(sa-container)"
+          terraform init -input=false -backend-config="resource_group_name=$(sa-rg)" -backend-config="storage_account_name=$(sa)" -backend-config="container_name=$(sa-container)"
           terraform plan -out=tfplan -input=false
           terraform apply tfplan
         workingDirectory: 'terraform'
