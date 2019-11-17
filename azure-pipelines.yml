@@ -18,11 +18,11 @@ stages:
           terraform apply tfplan
         workingDirectory: 'terraform'
       env:
-        TF_VAR_CLIENT_ID: $(client-id)
-        TF_VAR_CLIENT_SECRET: $(client-secret)
-        TF_VAR_SUBSCRIPTION_ID: $(subscription-id)
-        TF_VAR_TENANT_ID: $(tenant-id)
-        TF_VAR_ACCESS_KEY: $(access-key)
+        ARM_CLIENT_ID: $(client-id)
+        ARM_CLIENT_SECRET: $(client-secret)
+        ARM_SUBSCRIPTION_ID: $(subscription-id)
+        ARM_TENANT_ID: $(tenant-id)
+        ARM_ACCESS_KEY: $(access-key)
         TF_VAR_function_app_name: "$(function_app_name)"
 - stage: Deploy
   jobs:
