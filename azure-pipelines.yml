@@ -19,10 +19,10 @@ stages:
           terraform apply tfplan
         workingDirectory: 'terraform'
       env:
-        connectionString: $(connectionString)
-        key: $(key)
-        databaseId: $(databaseId)
-        containerId: $(containerId)
+        TF_VAR_connectionString: $(connectionString)
+        TF_VAR_key: $(key)
+        TF_VAR_databaseId: $(databaseId)
+        TF_VAR_containerId: $(containerId)
         sa-rg: $(sa-rg)
         sa: $(sa)
         sa-container: $(sa-container)
