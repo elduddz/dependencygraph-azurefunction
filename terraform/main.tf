@@ -7,6 +7,7 @@ terraform {
 data "azurerm_resource_group" "rg" {
   name = "dependencygraph-rg"
 }
+
 resource "azurerm_storage_account" "sa" {
   name                     = "depdencygraphsa"
   resource_group_name      = "${data.azurerm_resource_group.rg.name}"
@@ -40,9 +41,18 @@ resource "azurerm_function_app" "fa" {
     "key"                   = "${var.key}"
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE" = "true"
     "WEBSITE_RUN_FROM_PACKAGE" = "placeholder"
+    "APPINSIGHTS_INSTRUMENTATIONKEY"  = "${azurerm_application_insights.appInsight.instrumentation_key}"
   }
 
   lifecycle {
     ignore_changes = [app_settings["WEBSITE_RUN_FROM_PACKAGE"]]
   }
+}
+
+resource "azurerm_application_insights" "appInsight" {
+  name                = "${var.function_app_name}-appInsight"
+  resource_group_name = "${data.azurerm_resource_group.rg.name}"
+  location            = "${data.azurerm_resource_group.rg.location}"
+  application_type    = "Other"
+  tags                = "${var.tags}"
 }
