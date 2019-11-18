@@ -32,45 +32,30 @@ stages:
         ARM_TENANT_ID: $(tenant-id)
         ARM_ACCESS_KEY: $(access-key)
         TF_VAR_function_app_name: "$(function_app_name)"
-- stage: Build
+- stage: Release
+  dependsOn: terraform
   jobs:
-  - job: restore
+  - job: Release
+    container: mcr.microsoft.com/dotnet/core/sdk:2.2
     steps:
     - task: DotNetCoreCLI@2
-      displayName: restore packages
-      inputs:
-        command: 'restore'
-        projects: 'src/**.sln'
-        feedsToUse: 'select'
-        noCache: true
-    - task: DotNetCoreCLI@2
-      displayName: build app
+      displayName: build
       inputs:
         command: 'build'
-        projects: 'src/*.sln'
-        workingDirectory: 'src'
-        arguments: --output functionapp
-    - task: ArchiveFiles@2
-      displayName: 'Archive files'
+        projects: '**/src/*.sln'
+    - task: DotNetCoreCLI@2
+      displayName: publish
       inputs:
-        rootFolderOrFile: 'src/functionapp/'
-        includeRootFolder: false
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: drop'
-- stage: Deploy
-  dependsOn: Build
-  jobs:
-  - deployment:
-    environment: PRD 
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - checkout: none
-          - task: AzureFunctionApp@1
-            displayName: deploy function app
-            inputs:
-              azureSubscription: 'pipeline-deploy-dg'
-              appType: 'functionAppLinux'
-              appName: '$(function_app_name)'
-              package: '$(Agent.BuildDirectory)/drop/*.zip'
+        command: 'publish'
+        publishWebProjects: false
+        zipAfterPublish: true
+        projects: '**/src/*.csproj'
+        modifyOutputPath: false
+    - task: AzureFunctionApp@1
+      displayName: deploy
+      inputs:
+        azureSubscription: 'pipeline-deploy-dg'
+        appType: 'functionAppLinux'
+        appName: '$(function_app_name)'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        runtimeStack: 'DOCKER|microsoft/azure-functions-dotnet-core2.0:2.0'
