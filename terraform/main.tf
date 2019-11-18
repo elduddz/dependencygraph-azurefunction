@@ -54,5 +54,4 @@ resource "azurerm_application_insights" "appInsight" {
   resource_group_name = "${data.azurerm_resource_group.rg.name}"
   location            = "${data.azurerm_resource_group.rg.location}"
   application_type    = "Other"
-  tags                = "${var.tags}"
 }
