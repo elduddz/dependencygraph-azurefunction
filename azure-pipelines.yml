@@ -36,7 +36,7 @@ stages:
   dependsOn: terraform
   jobs:
   - job: Release
-    container: mcr.microsoft.com/dotnet/core/sdk:2.2
+    container: mcr.microsoft.com/dotnet/core/sdk:3.0
     steps:
     - task: DotNetCoreCLI@2
       displayName: build
