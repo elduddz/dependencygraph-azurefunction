@@ -43,6 +43,7 @@ resource "azurerm_function_app" "fa" {
     "WEBSITE_RUN_FROM_PACKAGE" = "placeholder"
     "APPINSIGHTS_INSTRUMENTATIONKEY"  = "${azurerm_application_insights.appInsight.instrumentation_key}"
   }
+  version = "~2"
 
   lifecycle {
     ignore_changes = [app_settings["WEBSITE_RUN_FROM_PACKAGE"]]
